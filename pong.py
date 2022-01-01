@@ -5,7 +5,22 @@ import turtle
 
 # Player setup
 score_player_a, score_player_b = 0, 0
-print("- 1 - easy\n- 2 - medium\n- 3 - hard\n")
+
+platform = int(input("What platform do you use (1 - windows, 2 - linux, 3 - mac)?\nPlatform: "))
+if platform == 1:
+    import winsound
+    def bounceSound():
+        winsound.PlaySound("bounce.wav", winsound.SND_ASYNC)
+elif platform == 2:
+    import os
+    def bounceSound():
+        os.system("aplay bounce.wav&")
+else:
+    import os
+    def bounceSound():
+        os.system("afplay bounce.wav&")
+
+print("\n\n- 1 - easy\n- 2 - medium\n- 3 - hard\n")
 difficulty = int(input("Difficulty: "))
 
 # Window Setup
@@ -63,22 +78,26 @@ pen.write("Player A: 0   Player B: 0", align="center", font=("Courier", 26, "nor
 # Function
 def paddle1_up():
     y = paddle1.ycor()
-    y += 20
+    if y <= 320:
+        y += 20
     paddle1.sety(y)
 
 def paddle1_down():
     y = paddle1.ycor()
-    y -= 20
+    if y >= -320:
+        y -= 20
     paddle1.sety(y)
 
 def paddle2_up():
     y = paddle2.ycor()
-    y += 20
+    if y <= 320:
+        y += 20
     paddle2.sety(y)
 
 def paddle2_down():
     y = paddle2.ycor()
-    y -= 20
+    if y >= -320:
+        y -= 20
     paddle2.sety(y)
 
 # Keyboard biding
@@ -87,8 +106,6 @@ window.onkeypress(paddle1_up, "w")
 window.onkeypress(paddle1_down, "s")
 window.onkeypress(paddle2_up, "Up")
 window.onkeypress(paddle2_down, "Down")
-
-
 
 # Main
 while True:
@@ -101,9 +118,12 @@ while True:
     # Border checking
     if ball.ycor() > (window.window_height()/2)-20:
         ball.dy *= -1
+        bounceSound()
+
 
     if ball.ycor() < -((window.window_height()/2)-20):
         ball.dy *= -1
+        bounceSound()
 
     if ball.xcor() > (window.window_width()/2)-20:
         ball.goto(0, 0)
@@ -116,14 +136,16 @@ while True:
         score_player_b += 1
 
     # Paddle and ball colisions
-
-    if (ball.xcor() > 450 and ball.xcor() < 470) and (ball.ycor() < paddle2.ycor() + 50 and ball.ycor() > paddle2.ycor() - 50):
-        ball.setx(420)
+    if (ball.xcor() > 450 and ball.xcor() < 470) and (ball.ycor() < paddle2.ycor() + 52 and ball.ycor() > paddle2.ycor() - 52):
+        ball.setx(430)
         ball.dx *= -1
+        bounceSound()
 
-    if (ball.xcor() < -450 and ball.xcor() > -470) and (ball.ycor() < paddle1.ycor() + 50 and ball.ycor() > paddle1.ycor() - 50):
-        ball.setx(-420)
+    if (ball.xcor() < -450 and ball.xcor() > -470) and (ball.ycor() < paddle1.ycor() + 52 and ball.ycor() > paddle1.ycor() - 52):
+        ball.setx(-430)
         ball.dx *= -1
+        bounceSound()
 
+    # Displaying score
     pen.clear()
     pen.write(f"Player A: {score_player_a}   Player B: {score_player_b}", align="center", font=("Courier", 24, "normal"))
