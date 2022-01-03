@@ -2,6 +2,7 @@
 # By @JKrecisz
 
 import turtle
+import random
 
 # Player setup
 score_player_a, score_player_b = 0, 0
@@ -66,6 +67,11 @@ else:
     ball.dx = 7
     ball.dy = -7
 
+start = [1, -1]
+
+ball.dx *= random.choice(start)
+ball.dy *= random.choice(start)
+
 # Pen
 pen = turtle.Turtle()
 pen.speed(0)
@@ -128,11 +134,13 @@ while True:
     if ball.xcor() > (window.window_width()/2)-20:
         ball.goto(0, 0)
         ball.dx *= -1
+        ball.dy *= random.choice(start)
         score_player_a += 1
 
     if ball.xcor() < -((window.window_width()/2)-20):
         ball.goto(0, 0)
         ball.dx *= -1
+        ball.dy *= random.choice(start)
         score_player_b += 1
 
     # Paddle and ball colisions
